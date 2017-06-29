@@ -37,7 +37,7 @@
 				<?php endforeach; ?>
 			<?php else: ?>
 				<tr>
-				      <td>Sem há registros cadastrados.</td>
+				      <td>Não há registros cadastrados.</td>
 				</tr>
 			<?php endif; ?>
 		  </tbody>
