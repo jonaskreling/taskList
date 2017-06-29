@@ -26,12 +26,12 @@
 				      <td><?php echo $task->id; ?></td>
 				      <td><?php echo $task->titulo; ?></td>
 				      <td><?php echo $task->descricao; ?></td>
-				      <td><?php echo $task->statustask->status; ?></td>
-				      <td><?php echo $task->datahoracriacao; ?></td>
+				      <td><?php //echo $task->statustask->status; ?></td>
+				      <td><?php echo date("d/m/Y H:i:s",strtotime($task->datahoracriacao)); ?></td>
 				      <td>
 				      	<?php echo $this->Html->link("View", ['action'=>'view',$task->id], ['class'=>'btn btn-primary']); ?>
 				      	<?php echo $this->Html->link("Edit", ['action'=>'edit',$task->id], ['class'=>'btn btn-success']); ?>
-				      	<?php echo $this->Html->link("Delete", ['action'=>'delete',$task->id], ['class'=>'btn btn-danger']); ?>
+				      	<?php echo $this->Form->postLink("Delete", ['action'=>'delete',$task->id], ['confirm' => 'Are you sure?'],['class'=>'btn btn-danger']); ?>
 				      </td>
 				    </tr>
 				<?php endforeach; ?>
