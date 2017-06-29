@@ -35,12 +35,9 @@ class TaskController extends AppController
 	
 	public function edit($id = null)
 	{
-		$taskUpdate = $this->Task->newEntity();
 		$task = $this->Task->get($id);
-		if($this->request->is('post')){
-			$taskUpdate = $this->Task->patchEntity($taskUpdate, $this->request->getData());
-			$task->titulo = $taskUpdate->titulo;
-			$task->descricao = $taskUpdate->descricao;
+		if($this->request->is(['post', 'put'])){
+            $this->Task->patchEntity($task, $this->request->data);
 			if($this->Task->save($task)){
 				$this->Flash->success("Tarefa atualizada com sucesso!", ['key'=>'message']);
 				return $this->redirect(['action'=>'index']);
@@ -49,5 +46,15 @@ class TaskController extends AppController
 		}
 		$this->set("task", $task);
 	}
+    
+    public function delete($id)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $task = $this->Task->get($id);
+        if ($this->Task->delete($task)) {
+            $this->Flash->success(__('A tarefa foi apagada.', h($id)));
+            return $this->redirect(['action' => 'index']);
+        }
+    }
 	
 }
