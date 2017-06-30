@@ -19,6 +19,22 @@
 				</div>
 			</div>
 			<div class="row">
+				<div class="col-sm-12 col-md-2">
+		    		Status
+		    	</div>
+				<div class="col-sm-12 col-md-8">
+					<?php echo $task->statustask->status; ?>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 col-md-2">
+		    		Data/hora Criação 
+		    	</div>
+				<div class="col-sm-12 col-md-8">
+					<?php echo date("d/m/Y H:i:s",strtotime($task->datacriacao)); ?>
+				</div>
+			</div>
+			<div class="row">
 				<div class="col-sm-12">
 					<div class="form-group">
 				      <div class="col-lg-10 col-lg-offset-2">

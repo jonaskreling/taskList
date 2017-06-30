@@ -7,9 +7,15 @@ use App\Controller\AppController;
 class TaskController extends AppController
 {
 	
+	public function initialize()
+	{
+		parent::initialize();
+		$this->loadComponent('Flash'); // Include the FlashComponent
+	}
+	
 	public function index()
 	{
-		$this->set("tasks", $this->Task->find("all"));
+		$this->set("tasks", $this->Task->find("all")->contain(['Statustask']));
 	}
 	
 	public function add()
@@ -18,7 +24,6 @@ class TaskController extends AppController
 		if($this->request->is('post')){
 			$task = $this->Task->patchEntity($task, $this->request->getData());
 			$task->datacriacao = date("Y-m-d H:i:s");
-			$task->statustask_id = 1;
 			if($this->Task->save($task)){
 				$this->Flash->success("Tarefa adiconada com sucesso!", ['key'=>'message']);
 				return $this->redirect(['action'=>'index']);
@@ -26,11 +31,18 @@ class TaskController extends AppController
 			$this->Flash->error(__("Tarefa não adiconada"));
 		}
 		$this->set('task',$task);
+		$this->loadModel('Statustask');
+		$statustask = $this->Statustask->find();
+		$statustask->formatResults(function(\Cake\Datasource\ResultSetInterface $results) {
+    		return $results->combine('id', 'status');
+		});
+		$this->set('statustasks',$statustask->all());
 	}
 	
 	public function view($id = null)
 	{
-		$this->set("task", $this->Task->get($id));
+		$task = $this->Task->get($id, ['contain' => ['Statustask']]);
+		$this->set("task", $task);
 	}
 	
 	public function edit($id = null)
@@ -45,6 +57,12 @@ class TaskController extends AppController
 			$this->Flash->error(__("Tarefa não atualizada"));
 		}
 		$this->set("task", $task);
+		$this->loadModel('Statustask');
+		$statustask = $this->Statustask->find();
+		$statustask->formatResults(function(\Cake\Datasource\ResultSetInterface $results) {
+			return $results->combine('id', 'status');
+		});
+			$this->set('statustasks',$statustask->all());
 	}
     
     public function delete($id)
